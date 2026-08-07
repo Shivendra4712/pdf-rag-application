@@ -1,10 +1,10 @@
 # PDF RAG Application using Qdrant & OpenRouter
 
-A simple Retrieval-Augmented Generation (RAG) application built with Python that answers questions from PDF documents using semantic search and an OpenRouter LLM.
+A simple Retrieval-Augmented Generation (RAG) application built with Python that answers questions from PDF documents using semantic search and an OpenRouter Large Language Model (LLM).
 
 ## Architecture
 
-PDFs → Text Extraction (PyMuPDF) → Chunking → Embeddings (BAAI/bge-small-en-v1.5) → Qdrant Vector Database → Semantic Retrieval → OpenRouter LLM → Answer with Citations
+PDF Documents → PyMuPDF → Text Chunking → Embeddings (all-MiniLM-L6-v2) → Qdrant Vector Database → Semantic Retrieval → OpenRouter LLM → Answer with Citations
 
 ## Tech Stack
 
@@ -12,20 +12,20 @@ PDFs → Text Extraction (PyMuPDF) → Chunking → Embeddings (BAAI/bge-small-e
 - PyMuPDF
 - Sentence Transformers
 - Qdrant (Local Vector Database)
-- OpenRouter API (Free Model)
+- OpenRouter API
 - python-dotenv
 
 ## Embedding Model
 
-**BAAI/bge-small-en-v1.5**
+**all-MiniLM-L6-v2**
 
 ## Assumptions
 
-- PDFs contain selectable text (not scanned images).
+- PDFs contain selectable text.
 - Local Qdrant is used for vector storage.
 - Only free OpenRouter models are used.
 - Answers are generated only from the retrieved document context.
-- If the answer is not found in the supplied PDFs, the application returns that the information is unavailable.
+- If the requested information is not present in the supplied PDFs, the application returns that the information is unavailable.
 
 ## Installation
 
@@ -80,7 +80,7 @@ Run the application:
 python app.py
 ```
 
-## Example Output
+## Example
 
 **Question**
 
@@ -112,6 +112,21 @@ Who won IPL 2025?
 
 Answer:
 The information is not available in the supplied documents.
+```
+
+## Project Structure
+
+```text
+project/
+│
+├── data/
+├── utils/
+│   └── pdf_loader.py
+├── app.py
+├── ingest.py
+├── config.py
+├── requirements.txt
+└── README.md
 ```
 
 ## Author
