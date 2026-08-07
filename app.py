@@ -58,10 +58,11 @@ while True:
         print(f"\nVector Search Error: {e}")
         continue
 
-    if len(results) == 0:
+    if len(results) == 0 or results[0].score < 0.55:
 
         print("\nThe information is not available in the supplied documents.")
         continue
+
 
     context = ""
 
@@ -74,25 +75,28 @@ while True:
         )
 
     prompt = f"""
-Answer ONLY using the context below.
+You are a helpful assistant.
 
-If the answer is not present, reply exactly:
+Answer ONLY using the provided context.
+
+Do NOT use any external knowledge.
+
+If the answer is not explicitly present in the context, reply exactly:
 
 "The information is not available in the supplied documents."
 
 Context:
-
 {context}
 
 Question:
-
 {question}
+
+Answer:
 """
 
     try:
-
         response = llm.chat.completions.create(
-            model="openrouter/free",
+        model="meta-llama/llama-3.3-8b-instruct:free",
             messages=[
                 {
                     "role": "user",

@@ -1,6 +1,5 @@
-venv/
-.venv/
-__pycache__/
 .env
+venv/
+__pycache__/
 qdrant_db/
-*.pyc
+qdrant_*/
