@@ -4,15 +4,15 @@ A simple Retrieval-Augmented Generation (RAG) application built with Python that
 
 ## Architecture
 
-PDFs → Text Extraction (PyMuPDF) → Chunking → Embeddings (BAAI/bge-small-en-v1.5) → Qdrant Vector DB → Semantic Retrieval → OpenRouter LLM → Answer + Citation
+PDFs → Text Extraction (PyMuPDF) → Chunking → Embeddings (BAAI/bge-small-en-v1.5) → Qdrant Vector Database → Semantic Retrieval → OpenRouter LLM → Answer with Citations
 
 ## Tech Stack
 
 - Python 3.11+
 - PyMuPDF
 - Sentence Transformers
-- Qdrant (Local)
-- OpenRouter API
+- Qdrant (Local Vector Database)
+- OpenRouter API (Free Model)
 - python-dotenv
 
 ## Embedding Model
@@ -21,21 +21,22 @@ PDFs → Text Extraction (PyMuPDF) → Chunking → Embeddings (BAAI/bge-small-e
 
 ## Assumptions
 
-- PDFs contain selectable text.
+- PDFs contain selectable text (not scanned images).
 - Local Qdrant is used for vector storage.
 - Only free OpenRouter models are used.
-- Answers are generated only from retrieved document context.
+- Answers are generated only from the retrieved document context.
+- If the answer is not found in the supplied PDFs, the application returns that the information is unavailable.
 
 ## Installation
 
-Clone the repository:
+### Clone the Repository
 
 ```bash
 git clone https://github.com/Shivendra4712/pdf-rag-application.git
 cd pdf-rag-application
 ```
 
-Create a virtual environment:
+### Create a Virtual Environment
 
 **Windows**
 
@@ -44,26 +45,28 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
-**Linux/macOS**
+**Linux / macOS**
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-Install dependencies:
+### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Create a `.env` file:
+### Create a `.env` File
 
 ```env
 OPENROUTER_API_KEY=your_openrouter_api_key
 ```
 
-Place all PDF files inside the `data/` folder.
+## Usage
+
+Place all PDF documents inside the `data/` folder.
 
 Index the PDFs:
 
@@ -81,19 +84,19 @@ python app.py
 
 **Question**
 
-```
+```text
 What is Retrieval-Augmented Generation?
 ```
 
 **Answer**
 
-```
+```text
 RAG combines document retrieval with a language model to generate answers grounded in the supplied documents.
 ```
 
 **Citation**
 
-```
+```text
 Document: AI_Guide.pdf
 Page: 12
 
@@ -103,7 +106,7 @@ Retrieved Text:
 
 **Unknown Question**
 
-```
+```text
 Question:
 Who won IPL 2025?
 
@@ -111,19 +114,10 @@ Answer:
 The information is not available in the supplied documents.
 ```
 
-## Libraries Used
-
-- PyMuPDF
-- sentence-transformers
-- qdrant-client
-- openai
-- python-dotenv
-
 ## Author
 
 **Shivendra Pratap Singh**
 
 GitHub: https://github.com/Shivendra4712
-## 📄 License
 
-This project is developed for educational and learning purposes.
+LinkedIn: https://linkedin.com/in/shivendra-pratap-singh-85258b314
