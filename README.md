@@ -1,208 +1,129 @@
-# 📄 PDF RAG Application using Qdrant & OpenRouter
+# PDF RAG Application using Qdrant & OpenRouter
 
-A Retrieval-Augmented Generation (RAG) application built with Python that answers user questions from PDF documents using semantic search and a Large Language Model (LLM).
+A simple Retrieval-Augmented Generation (RAG) application built with Python that answers questions from PDF documents using semantic search and an OpenRouter LLM.
 
-## 🚀 Features
+## Architecture
 
-- Extracts text from PDF documents
-- Generates semantic embeddings using Sentence Transformers
-- Stores embeddings in a local Qdrant vector database
-- Retrieves the most relevant document chunks
-- Uses OpenRouter LLM to generate context-aware answers
-- Displays document name and page number as citations
-- Responds with:
-  > "The information is not available in the supplied documents."
-  when the answer is not found in the uploaded PDFs.
+PDFs → Text Extraction (PyMuPDF) → Chunking → Embeddings (BAAI/bge-small-en-v1.5) → Qdrant Vector DB → Semantic Retrieval → OpenRouter LLM → Answer + Citation
 
----
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 - Python 3.11+
 - PyMuPDF
 - Sentence Transformers
-- Qdrant (Local Vector Database)
+- Qdrant (Local)
 - OpenRouter API
 - python-dotenv
 
----
+## Embedding Model
 
-## 📁 Project Structure
+**BAAI/bge-small-en-v1.5**
 
-```
-project/
-│
-├── data/                  # PDF files
-├── qdrant_db/             # Local Qdrant storage
-├── utils/
-│   └── pdf_loader.py
-│
-├── app.py                 # Chat application
-├── ingest.py              # PDF indexing script
-├── config.py              # Configuration
-├── requirements.txt
-├── .env
-└── README.md
-```
+## Assumptions
 
----
+- PDFs contain selectable text.
+- Local Qdrant is used for vector storage.
+- Only free OpenRouter models are used.
+- Answers are generated only from retrieved document context.
 
-## ⚙️ Installation
+## Installation
 
-### 1. Clone the repository
+Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/pdf-rag.git
-cd pdf-rag
+git clone https://github.com/Shivendra4712/pdf-rag-application.git
+cd pdf-rag-application
 ```
 
-### 2. Create a virtual environment
+Create a virtual environment:
 
-Windows
+**Windows**
 
 ```bash
 python -m venv venv
 venv\Scripts\activate
 ```
 
-Linux / macOS
+**Linux/macOS**
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 3. Install dependencies
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
----
-
-## 🔑 Environment Variables
-
-Create a `.env` file in the project root.
+Create a `.env` file:
 
 ```env
 OPENROUTER_API_KEY=your_openrouter_api_key
 ```
 
----
-
-## 📥 Add PDF Documents
-
 Place all PDF files inside the `data/` folder.
 
-Example:
-
-```
-data/
-├── document1.pdf
-├── document2.pdf
-└── notes.pdf
-```
-
----
-
-## 📚 Index the PDFs
-
-Run:
+Index the PDFs:
 
 ```bash
 python ingest.py
 ```
 
-Expected output:
-
-```
-Indexed XXXX pages successfully.
-```
-
----
-
-## 💬 Run the Chat Application
+Run the application:
 
 ```bash
 python app.py
 ```
 
-Example:
+## Example Output
+
+**Question**
 
 ```
-Ask a question:
-
-> What is Retrieval-Augmented Generation?
+What is Retrieval-Augmented Generation?
 ```
 
-Output:
+**Answer**
 
 ```
-ANSWER
---------------------------------
+RAG combines document retrieval with a language model to generate answers grounded in the supplied documents.
+```
 
-RAG combines document retrieval with an LLM to generate
-answers grounded in the supplied documents.
+**Citation**
 
-CITATIONS
---------------------------------
-
+```
 Document: AI_Guide.pdf
 Page: 12
+
+Retrieved Text:
+"Retrieval-Augmented Generation (RAG) combines retrieval of relevant documents with a language model..."
 ```
 
----
-
-## 🧠 How It Works
-
-1. PDFs are loaded from the `data/` folder.
-2. Text is extracted using PyMuPDF.
-3. Sentence Transformer generates embeddings.
-4. Embeddings are stored in Qdrant.
-5. User query is embedded.
-6. Top matching document chunks are retrieved.
-7. Retrieved context is sent to the OpenRouter LLM.
-8. The generated answer and citations are displayed.
-
----
-
-## 📦 Dependencies
+**Unknown Question**
 
 ```
-PyMuPDF
-sentence-transformers
-qdrant-client
-openai
-python-dotenv
-pydantic
+Question:
+Who won IPL 2025?
+
+Answer:
+The information is not available in the supplied documents.
 ```
 
----
+## Libraries Used
 
-## 📌 Future Improvements
+- PyMuPDF
+- sentence-transformers
+- qdrant-client
+- openai
+- python-dotenv
 
-- Streamlit Web Interface
-- Multi-PDF Collections
-- Conversation Memory
-- Metadata Filtering
-- Hybrid Search
-- Docker Support
-- FastAPI REST API
-
----
-
-## 👨‍💻 Author
+## Author
 
 **Shivendra Pratap Singh**
 
-Python Developer | AI & Machine Learning Enthusiast
-
-GitHub: https://github.com/yourusername
-
-LinkedIn: https://linkedin.com/in/yourprofile
-
----
-
+GitHub: https://github.com/Shivendra4712
 ## 📄 License
 
 This project is developed for educational and learning purposes.
