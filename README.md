@@ -1,123 +1,47 @@
-# PDF RAG Application using Qdrant & OpenRouter
+# PDF RAG Application
 
-A simple Retrieval-Augmented Generation (RAG) application built with Python that answers questions from PDF documents using semantic search and an OpenRouter Large Language Model (LLM).
+A simple Retrieval-Augmented Generation (RAG) application built with Python that answers questions using only the supplied PDF documents.
 
 ## Architecture
 
-PDF Documents → PyMuPDF → Text Chunking → Embeddings (all-MiniLM-L6-v2) → Qdrant Vector Database → Semantic Retrieval → OpenRouter LLM → Answer with Citations
+```text
+PDF Documents
+     ↓
+PyMuPDF → Text Chunking
+     ↓
+Sentence Transformer
+(all-MiniLM-L6-v2)
+     ↓
+Qdrant Vector Database
+     ↓
+Semantic Retrieval (Top 5)
+     ↓
+OpenRouter Free LLM
+     ↓
+Answer + Citation
+```
 
-## Tech Stack
+## Libraries & Technologies
 
 - Python 3.11+
-- PyMuPDF
-- Sentence Transformers
-- Qdrant (Local Vector Database)
-- OpenRouter API
-- python-dotenv
+- PyMuPDF — PDF text extraction
+- Sentence Transformers — document/query embeddings
+- Qdrant — vector database
+- OpenRouter — free LLM inference
+- python-dotenv — environment variables
 
 ## Embedding Model
 
-**all-MiniLM-L6-v2**
-
-## Assumptions
-
-- PDFs contain selectable text.
-- Local Qdrant is used for vector storage.
-- Only free OpenRouter models are used.
-- Answers are generated only from the retrieved document context.
-- If the requested information is not present in the supplied PDFs, the application returns that the information is unavailable.
-
-## Installation
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/Shivendra4712/pdf-rag-application.git
-cd pdf-rag-application
-```
-
-### Create a Virtual Environment
-
-**Windows**
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-**Linux / macOS**
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### Create a `.env` File
-
-```env
-OPENROUTER_API_KEY=your_openrouter_api_key
-```
-
-## Usage
-
-Place all PDF documents inside the `data/` folder.
-
-Index the PDFs:
-
-```bash
-python ingest.py
-```
-
-Run the application:
-
-```bash
-python app.py
-```
-
-## Example
-
-**Question**
-
 ```text
-What is Retrieval-Augmented Generation?
+all-MiniLM-L6-v2
 ```
 
-**Answer**
-
-```text
-RAG combines document retrieval with a language model to generate answers grounded in the supplied documents.
-```
-
-**Citation**
-
-```text
-Document: AI_Guide.pdf
-Page: 12
-
-Retrieved Text:
-"Retrieval-Augmented Generation (RAG) combines retrieval of relevant documents with a language model..."
-```
-
-**Unknown Question**
-
-```text
-Question:
-Who won IPL 2025?
-
-Answer:
-The information is not available in the supplied documents.
-```
+The model generates 384-dimensional embeddings used for semantic similarity search.
 
 ## Project Structure
 
 ```text
-project/
+pdf-rag-application/
 │
 ├── data/
 ├── utils/
@@ -126,13 +50,106 @@ project/
 ├── ingest.py
 ├── config.py
 ├── requirements.txt
-└── README.md
+├── README.md
+└── .gitignore
 ```
+
+## How to Run
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/Shivendra4712/pdf-rag-application.git
+cd pdf-rag-application
+```
+
+### 2. Create Virtual Environment
+
+**Windows**
+
+```powershell
+python -m venv venv
+venv\Scripts\activate
+```
+
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure OpenRouter
+
+Create a `.env` file in the project root:
+
+```text
+OPENROUTER_API_KEY=your_openrouter_api_key
+```
+
+### 5. Add Documents
+
+Place the supplied PDF documents inside:
+
+```text
+data/
+```
+
+### 6. Index Documents
+
+```bash
+python ingest.py
+```
+
+### 7. Run Application
+
+```bash
+python app.py
+```
+
+The application retrieves the top 5 relevant chunks and generates an answer using only the retrieved PDF context.
+
+## Citations
+
+Every generated answer displays:
+
+```text
+Document
+Page
+Similarity
+Retrieved Text
+```
+
+Example:
+
+```text
+Document: document.pdf
+Page: 17
+Similarity: 0.78
+
+Retrieved Text:
+"Relevant text retrieved from the document..."
+```
+
+## Unknown Questions
+
+If the requested information is not present in the supplied documents, the application returns:
+
+```text
+The information is not available in the supplied documents.
+```
+
+The LLM is instructed not to use external knowledge or fabricate answers.
+
+## Assumptions
+
+- PDFs contain selectable text.
+- Qdrant is used locally for vector storage.
+- `all-MiniLM-L6-v2` is used for embeddings.
+- The top 5 relevant chunks are passed to the LLM.
+- Only retrieved PDF context is used for answer generation.
 
 ## Author
 
 **Shivendra Pratap Singh**
 
 GitHub: https://github.com/Shivendra4712
-
-LinkedIn: https://linkedin.com/in/shivendra-pratap-singh-85258b314
